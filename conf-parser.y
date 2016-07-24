@@ -1,6 +1,5 @@
 %{
 
-#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -11,8 +10,9 @@ void yyerror(const char *s);
 
 %}
 
-%union {
-	int64_t ival;
+%union
+{
+	long long ival;
 	double fval;
 	char *sval;
 }
@@ -36,30 +36,20 @@ section:		  section_header commands
 			| section_header
 			;
 
-section_header:		  LEFT_BRACKET STR RIGHT_BRACKET { printf("Found a header: %s", $2); }
+section_header:		  LEFT_BRACKET STR RIGHT_BRACKET { printf("Found a header: %s\n", $2); }
 			;
 
 commands:		  commands command
 			| command
 			;
 
-command:		  STR { printf("Found a command: %s", $1); }
+command:		  STR { printf("Found a command: %s\n", $1); }
 			;
 
 %%
-
-int main(int argc, char **argv)
-{
-	do
-	{
-		yyparse();
-	}
-	while (!feof(yyin));
-}
 
 void yyerror(const char *s)
 {
 	printf("Parse error. Message: %s", s);
 	exit(-1);
 }
-
